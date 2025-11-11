@@ -2,6 +2,23 @@
 
 Ce document définit les conventions de code et d'organisation pour le projet Lab-doku sous Godot 4.x.
 
+## Nommage des fichiers de documentation
+
+**Règle générale** : Préférer `snake_case` ou `kebab-case` pour la lisibilité.
+
+**Exceptions** (conventions GitHub/racine) :
+
+- `README.md` : Standard GitHub (UPPERCASE)
+- `CONTRIBUTING.md` : Standard GitHub (UPPERCASE)
+- `CLAUDE.md` : Fichier spécifique Claude Code (UPPERCASE)
+
+**Fichiers dans `docs/`** :
+
+- Préférer : `design_doc.md`, `paper-prototype-test-results.md`, `godot-proto-specs.md`
+- Éviter : `DESIGN_DOC.md`, `PAPER_PROTOTYPE_TEST_RESULTS.md` (moins lisible)
+
+**Décision** : Migration progressive des fichiers UPPERCASE existants vers snake_case lors de refactorings futurs (pas prioritaire).
+
 ## Style GDScript
 
 ### Nommage
