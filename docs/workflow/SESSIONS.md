@@ -192,7 +192,28 @@ func _unhandled_input(event: InputEvent):
 
 **Objectif** : Documenter la session, mesurer et préparer la suivante.
 
-**Actions** :
+### Choix du template de rétro
+
+Deux templates disponibles dans `docs/workflow/templates/` :
+
+1. **`RETRO_SESSION_CONCISE.md`** (recommandé par défaut)
+   - **Usage** : Sessions normales/quotidiennes
+   - **Format** : Léger, focus sur l'essentiel
+   - **Durée remplissage** : 3-5 min
+
+2. **`RETRO_TEMPLATE.md`** (détaillé)
+   - **Usage** : Sessions importantes, complexes ou rétrospectives périodiques (ex: fin de phase)
+   - **Format** : Complet avec toutes les sections détaillées
+   - **Durée remplissage** : 8-12 min
+
+**Règle** : Utiliser le template concis sauf si :
+
+- Session > 45 min ou très complexe
+- Fin de phase majeure (Phase 0, Phase 1, etc.)
+- Décisions techniques importantes prises
+- Nombreux blocages ou apprentissages critiques
+
+### Actions
 
 1. **Remplir le template de rétro** : `docs/workflow/retros/YYYYMMDD_session_N.md`
 2. **Mesurer** :
@@ -203,6 +224,7 @@ func _unhandled_input(event: InputEvent):
 4. **Identifier les blocages** : Qu'est-ce qui a pris plus de temps que prévu ?
 5. **Mettre à jour le backlog** : Ajouter tous les nouveaux problèmes identifiés
 6. **Créer fichier de tests suivant** : Préparer la prochaine session avec les problèmes prioritaires
+7. **Solliciter feedback utilisateur** : Inviter l'utilisateur à compléter la section feedback (Arrêter/Commencer/Continuer)
 
 **Résultat** : Fichier de rétro complété dans `docs/workflow/retros/` et fichier de tests pour session suivante dans `docs/workflow/tests/`.
 

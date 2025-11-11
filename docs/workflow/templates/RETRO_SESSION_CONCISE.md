@@ -1,9 +1,11 @@
 # Rétro Session YYYYMMDD_NN
 
+> **Usage** : Template concis pour sessions normales/quotidiennes.
+> Pour sessions importantes ou fin de phase, utiliser `RETRO_TEMPLATE.md`.
+
 **Date** : YYYY-MM-DD
-**Début** : HH:MM
-**Fin** : HH:MM
 **Durée** : XX min
+**Phase** : phase-X-nom
 
 ## Objectifs
 
@@ -46,6 +48,14 @@ git commit -m "type: description"
 
 1. Objectif 1
 2. Objectif 2
+
+## Feedback de l'utilisateur
+
+> Utiliser ce feedback pour améliorer les prochaines sessions.
+
+- **🛑 Arrêter** :
+- **▶️ Commencer** :
+- **✅ Continuer** :
 
 ---
 

@@ -1,5 +1,8 @@
 # Rétro Session YYYYMMDD_N
 
+> **Usage** : Template détaillé pour sessions importantes, complexes ou rétrospectives périodiques (ex: fin de phase).
+> Pour sessions normales/quotidiennes, utiliser `RETRO_SESSION_CONCISE.md`.
+
 **Date** : YYYY-MM-DD
 **Durée** : XX min
 **Phase** : phase-X-nom
@@ -199,6 +202,35 @@ git commit -m "type: description"
 - Note libre 1
 - Note libre 2
 - Idée pour amélioration future
+
+## Feedback de l'utilisateur
+
+> **IMPORTANT** : Cette section invite l'utilisateur à participer à la rétrospective.
+> Utiliser ce feedback pour améliorer les prochaines sessions et, le cas échéant, mettre à jour les fichiers de conventions et de principes.
+
+### 🛑 Arrêter
+
+Que faudrait-il **arrêter de faire** ?
+
+```markdown
+[À remplir par l'utilisateur]
+```
+
+### ▶️ Commencer
+
+Que pourrions-nous **commencer à faire** ?
+
+```markdown
+[À remplir par l'utilisateur]
+```
+
+### ✅ Continuer
+
+Qu'est-ce qu'il faut **continuer à faire** ?
+
+```markdown
+[À remplir par l'utilisateur]
+```
 
 ---
 
