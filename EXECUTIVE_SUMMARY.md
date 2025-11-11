@@ -50,17 +50,19 @@ Tu navigues sur une grille de sudoku, mais tu peux seulement marcher sur les chi
 
 - **Jetons indices numérotés** (1-4) posés sur certaines cases de la grille
 - Ramassage automatique en passant dessus → stockage dans l'inventaire
+- **Départ : 2 indices aléatoires** dans l'inventaire (règle validée)
 - Contrainte : Total (grille + inventaire) ≤ 4 par chiffre
 - Sur case vide : choisir un jeton de l'inventaire à placer (ou annuler/reculer)
-- Récompense par série : indices aléatoires supplémentaires (variantes à tester : 1 ou 2)
+- **Récompense par placement correct** : +1 indice aléatoire (nouveau mécanisme)
+- Récompense par série complétée : +1-2 indices aléatoires (à ajuster)
 
-### Événements d'erreur
+### Événements d'erreur (système révisé)
 
-Quand tu te trompes (probabilité équirépartie) :
+Quand tu te trompes (distribution ajustée après tests) :
 
-- **💥 Explosion** : Efface les 4 cases adjacentes (cases pré-remplies protégées)
-- **🌀 Téléportation** : Te déplace sur une case pré-remplie accessible aléatoire
-- **📉 Perte** : Perds 1 indice de ton inventaire (au hasard)
+- **📉 Perte d'indice** (PRINCIPAL, 60-100%) : Perds 1 indice de ton inventaire → Game Over si vide
+- **🌀 Téléportation** (OCCASIONNEL, 10-30%) : Te déplace sur une case pré-remplie aléatoire
+- **💥 Explosion** (OPTIONNEL, 0-10%) : Efface les 4-8 cases adjacentes (cases pré-remplies protégées)
 
 ---
 
@@ -115,11 +117,18 @@ Aucun jeu n'a fusionné sudoku et navigation spatiale de cette manière. Le terr
 
 ## 📈 Validation
 
-**Phase 1 : Prototype papier** ✓ (en cours)
+**Phase 1 : Prototype papier** ✅ (complété - novembre 2025)
 
-- Tester les mécaniques core sur papier
-- Identifier les problèmes de game design
-- Valider le fun potentiel
+- ✅ Mécaniques core testées et validées
+- ✅ Problèmes identifiés et résolus (2 blocages critiques)
+- ✅ Fun potentiel validé - GO pour proto digital
+- **Rapport complet** : [`docs/PAPER_PROTOTYPE_TEST_RESULTS.md`](docs/PAPER_PROTOTYPE_TEST_RESULTS.md)
+
+**Ajustements majeurs** :
+- Navigation sur case vide : pouvoir rester sans clé après placement
+- Démarrage : 2 indices aléatoires obligatoires
+- Game Over si inventaire vide (nouvelle condition de défaite)
+- Événements : perte d'indice principale (60-100%)
 
 **Phase 2 : Prototype digital** (à venir)
 
@@ -170,7 +179,8 @@ Mais avant tout : **valider que c'est fun**.
 
 ---
 
-**Créé en novembre 2025**  
-**Statut** : Conception & Prototype papier  
-**Temps investi** : ~5h de design, 0h de code  
-**Prochaine étape** : Tests papier + début prototype Godot
+**Créé en novembre 2025**
+**Statut** : Tests papier complétés ✅ Préparation prototype digital
+**Temps investi** : ~5h design + ~3h tests papier, 0h de code
+**Prochaine étape** : Spécifications techniques Godot + début implémentation
+**Dernière mise à jour** : 2025-11-11

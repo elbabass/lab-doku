@@ -72,6 +72,18 @@ Je suis sur une case en haut à droite de la grille. Jusqu'ici, tout était parf
 - Pas de déplacement en diagonal
 - Vue du dessus (2D)
 
+#### Navigation sur cases vides (règle spéciale)
+
+**Règle validée par tests papier** :
+
+- Une fois un chiffre posé sur une case vide, le joueur peut **rester sur cette case même sans posséder la clé correspondante**
+- Une fois sorti de la case, impossible d'y revenir sans posséder la clé du chiffre
+- **Justification** : Permet de débloquer des situations où les clés initiales ne donnent accès à aucun chemin
+- **Impact tactique** : Crée des décisions stratégiques (placer un chiffre ouvre un chemin mais peut piéger si on sort)
+- **Exemples d'usage** :
+  - Pont temporaire : Placer un "3" pour traverser une zone inaccessible, mais ne pas pouvoir revenir sans clé bleue
+  - Déblocage : Être coincé avec clés 1 et 3 (jamais adjacentes) → placer un chiffre sur case vide pour progresser
+
 #### Clés de couleur
 
 **Pour sudoku 4x4** :
@@ -111,17 +123,25 @@ Le joueur collecte des **jetons indices numérotés** (1, 2, 3, 4) qui lui perme
 - Les jetons ramassés vont dans l'**inventaire** (capacité illimitée)
 - **Contrainte** : Total (grille + inventaire) ≤ 4 pour chaque chiffre
   - Exemple : Si 3×"2" sont déjà sur la grille, le joueur ne peut avoir que 1×"2" max dans son inventaire
-- Le joueur démarre avec 2-3 jetons indices numérotés
+- **État initial** : Le joueur démarre avec **2 indices aléatoires** dans son inventaire
+  - Procédure de tirage : Si tirage invalide (dépasse contrainte 4 max), défausser et repiocher
+  - **Justification** : Sans indices au départ, impossible de se déplacer vers les cases vides (blocage critique)
 
 #### Obtention d'indices
 
-**Variantes à tester** pour chaque **série complétée** :
+**Gain par placement correct** (nouveau mécanisme validé) :
+
+- À chaque chiffre correct posé → **+1 indice aléatoire**
+- **Justification** : Compense les pertes d'erreur, crée un cycle risque/récompense
+- Les indices sont générés aléatoirement (1-4 avec contrainte ≤4 par chiffre)
+
+**Gain par série complétée** :
 
 - **Variante A** : +1 indice aléatoire
 - **Variante B** : +2 indices aléatoires (version proto papier actuelle)
 - **Variante C** : +X indices (à déterminer selon tests)
 
-Les indices sont générés aléatoirement (simulation d'un dé à 4 faces en version digitale).
+**Note** : Les deux mécanismes (placement + série) sont cumulatifs. Paramètres à ajuster selon tests de durée.
 
 #### Action de placement
 
@@ -144,32 +164,37 @@ Les indices sont générés aléatoirement (simulation d'un dé à 4 faces en ve
 - Affichées comme un "score négatif"
 - Évolution possible : limiter le nombre d'erreurs ou déclencher des malus
 
-#### Événements d'erreur (aléatoires)
+#### Événements d'erreur (système révisé suite aux tests)
 
-Quand le joueur place un mauvais chiffre, **1 événement parmi 3** se déclenche. La probabilité est équirépartie (simulation d'un dé à 6 faces en version digitale : 1-2 = Explosion, 3-4 = Téléportation, 5-6 = Perte) :
+Quand le joueur place un mauvais chiffre, **un événement se déclenche**. La distribution a été révisée suite aux tests papier pour privilégier la tension sur les ressources :
 
-**💥 Explosion locale**
+**Nouveau système** (paramètres à ajuster en proto digital) :
 
-- Efface les chiffres des 4 cases adjacentes (haut/bas/gauche/droite)
+**💥 Explosion locale** (ÉVÉNEMENT OPTIONNEL)
+
+- Efface les chiffres des 4 cases adjacentes (haut/bas/gauche/droite) - ou 8 cases en mode sévère
 - Forme une croix (style Bomberman)
 - Les cases vides ne sont pas affectées
 - Les chiffres **pré-remplis** (donnés au début) sont **protégés** (ne peuvent pas être effacés)
 - **Feedback visuel** : Flash rouge + animation de disparition + débris
 - **Son** : "BOOM" satisfaisant
+- **Probabilité suggérée** : 0-10% (à décider si conservé, testé en version sévère = jouable)
 
-**🌀 Téléportation aléatoire**
+**🌀 Téléportation aléatoire** (ÉVÉNEMENT SECONDAIRE)
 
-- Déplace le joueur sur une case **pré-remplie** aléatoire accessible (où il possède la clé)
-- Si aucune case pré-remplie accessible : le joueur **reste sur place** (téléportation échoue)
+- Déplace le joueur sur une case **pré-remplie** aléatoire (pas forcément accessible)
+- Peut accidentellement aider le joueur en le déplaçant vers une zone stratégique
 - **Feedback visuel** : Fade out → fade in à la nouvelle position
 - **Son** : "Whoosh" ou effet de distorsion
+- **Probabilité suggérée** : 10-30% (événement occasionnel pour créer moments émergents)
 
-**📉 Perte d'indices**
+**📉 Perte d'indices** (ÉVÉNEMENT PRINCIPAL)
 
 - Le joueur perd **1 indice de son inventaire** (au hasard)
-- Si le joueur a 0 indices : rien ne se passe
+- **Si le joueur a 0 indices** : Game Over (voir condition de défaite)
 - **Feedback visuel** : Compteur d'indices clignote en rouge + gros "-1" rouge qui descend en fade out
 - **Son** : Effet négatif (cloche, buzzer)
+- **Probabilité suggérée** : 60-100% (événement principal pour créer tension sur ressources)
 
 #### Philosophie des événements
 
@@ -181,11 +206,17 @@ Les événements sont **majoritairement punitifs** mais peuvent **accidentelleme
 
 ---
 
-### 4. Condition de victoire
+### 4. Conditions de victoire et de défaite
 
 **Victoire** : Toutes les 16 cases sont remplies correctement (sudoku résolu).
 
-**Défaite** : Aucune pour le moment (v0.1). Le joueur peut continuer indéfiniment tant qu'il a des indices.
+**Défaite** (nouvelle règle validée) : **Game Over si inventaire vide**
+
+- Si le joueur n'a plus aucun indice chiffré dans son inventaire → **Game Over**
+- Impossible de se déplacer vers une case vide ou de placer un chiffre
+- **Justification** : Crée une vraie tension et un risque d'échec
+- **Impact** : Transforme la perte d'indice en événement critique
+- **Équilibrage** : Compensé par gain d'indice à chaque placement correct
 
 **Score** : Nombre d'erreurs cumulées (plus bas = mieux).
 
@@ -201,10 +232,11 @@ Les événements sont **majoritairement punitifs** mais peuvent **accidentelleme
 4. **Décider** → Place-t-il le chiffre maintenant ou explore-t-il d'abord ?
 5. **Placer** → Il dépense 1 indice et pose un chiffre
 6. **Réagir** →
-   - Correct : de nouveaux chemins s'ouvrent
-   - Erreur : gérer l'événement chaotique
-7. **Progresser** → Compléter des séries donne clés + indices
-8. Retour à 1
+   - Correct : de nouveaux chemins s'ouvrent + **gain d'1 indice**
+   - Erreur : gérer l'événement (principalement perte d'indice)
+7. **Vérifier** → Inventaire vide ? → Game Over
+8. **Progresser** → Compléter des séries donne clés + indices bonus
+9. Retour à 1
 
 ### Micro-décisions intéressantes
 
@@ -238,25 +270,34 @@ Les événements sont **majoritairement punitifs** mais peuvent **accidentelleme
 
 **Clés** : 1-2 clés au départ (selon difficulté)
 
-- Facile : 2 clés (ex : 🔴1 et 🔵3)
-- Normal : 1 clé (ex : 🔴1)
+- Facile : 3 clés (ex : 🔴1, 🟢2, 🔵3) - testé, bon pour débutants
+- Normal : 2 clés (ex : 🔴1 et 🔵3) - standard validé
+- Difficile : 1 clé (ex : 🔴1) - testé, très restrictif, bon pour mode challenge
 
-**Indices** : 2-3 jetons indices numérotés au départ
+**Indices** : **2 indices aléatoires** au départ (règle validée)
 
-- Les jetons peuvent être des doublons (ex : 🔍1, 🔍3, 🔍3)
-- À ajuster selon les tests (nombre et composition)
+- Tirage aléatoire avec contrainte ≤4 par chiffre (grille + inventaire)
+- Si tirage invalide : défausser et repiocher
+- **Justification** : Résout le blocage initial (impossible d'avancer sans indices)
 
-### Paramètres à tuner (après tests)
+### Paramètres validés (tests papier)
 
-- Nombre de jetons indices au départ (actuellement 2-3)
-- Composition des jetons de départ (quels chiffres ?)
-- Nombre de clés au départ (actuellement 1-2)
-- Nombre de jetons indices posés sur la grille (position et valeurs)
-- Nombre d'indices gagnés par série (variantes : 1 vs 2 vs X)
-- Probabilités des événements d'erreur (actuellement équirépartie 33/33/33)
-- Intensité des événements (ex : explosion 4 ou 8 cases ?)
-- Contrainte inventaire (≤4 vs ≤3 vs illimité)
+- **Indices au départ** : 2 indices aléatoires (fixé)
+- **Clés au départ** : 2 clés standard (1 ou 3 pour modes difficulté)
+- **Contrainte inventaire** : ≤4 par chiffre (validé)
+- **Gain par placement correct** : +1 indice (nouveau mécanisme)
+- **Game Over** : Inventaire vide (nouveau)
+
+### Paramètres à tuner (proto digital)
+
+- Probabilités des événements d'erreur :
+  - **Recommandation initiale** : 70% Perte / 30% Téléportation / 0% Explosion
+  - À ajuster selon tests utilisateurs
+- Nombre d'indices gagnés par série complétée (actuellement 1-2, à tester)
+- Nombre de jetons indices posés sur la grille initialement (position et valeurs)
+- Intensité explosion si conservée (4 ou 8 cases)
 - Nombre de cases pré-remplies (actuellement 5-6)
+- Durée timer par série (si implémenté)
 
 ---
 
@@ -303,6 +344,70 @@ Chaîne YouTube de référence pour les variantes de sudoku :
 
 ---
 
+## Systèmes de difficulté avancée (Post-MVP)
+
+### Timer par série ⭐ PRIORITÉ
+
+**Problème identifié** : Parties trop courtes (2 min), manque de pression temporelle.
+
+**Mécanique** :
+
+- Chaque série (ligne/colonne/bloc 2x2) dispose d'un **compte à rebours indépendant**
+- À zéro : la série correspondante **explose** (tous les chiffres non pré-remplis disparaissent)
+- Force l'ordre de résolution et maintient la pression constante
+- Crée des dilemmes : résoudre vite vs. résoudre sans erreur
+
+**Paramètres à définir** :
+
+- Durée initiale du timer (30s ? 60s ? variable ?)
+- UI : barre de progression, compte à rebours numérique
+- Son d'alerte avant expiration
+- Pause du timer pendant événements ?
+
+**Justification** : Solution principale pour augmenter durée et difficulté sans agrandir la grille.
+
+---
+
+### Grilles progressives ⭐ PRIORITÉ
+
+**Problème identifié** : Grille 4x4 trop simple, épuisée en 2 minutes.
+
+**Progression proposée** :
+
+1. **4x4** (tutoriel/débutant) : 16 cases, 4 chiffres, 4 clés
+2. **5x5** (intermédiaire) : 25 cases, 5 chiffres, 5 clés
+3. **6x6** (avancé) : 36 cases, 6 chiffres, 6 clés
+4. **9x9** (expert - lointain) : 81 cases, 9 chiffres, regroupement de clés nécessaire
+
+**Implications techniques** :
+
+- Système de clés : 1 clé = 1 chiffre jusqu'à 6x6
+- 9x9 nécessite regroupement (Rouge = 1,2,3 / Vert = 4,5,6 / Bleu = 7,8,9)
+- Génération de grilles valides (algorithme sudoku)
+- Scaling de l'UI et de la caméra
+
+**Justification** : Augmente naturellement complexité et durée sans changer les mécaniques core.
+
+---
+
+### Autres idées (tests papier)
+
+#### Poseur de bombe adverse
+
+- IA qui se déplace sur la grille
+- Crée des zones dangereuses ou objectifs de capture
+- Si capturé : victoire bonus ou ressources supplémentaires
+
+#### Mode multijoueur
+
+- **Coopératif** : 2 joueurs partagent une grille, se coordonnent
+- **Compétitif** : 2 grilles séparées, course au temps/score
+- **Impact** : Les décisions d'un joueur influent sur l'autre
+
+**Statut** : Concepts validés intéressants, mais très post-MVP.
+
+---
+
 ## Prototype papier
 
 ### Objectif
@@ -326,6 +431,37 @@ Voir le fichier `prototypes/paper/LABDOKU_PROTOTYPE_PAPIER.md` pour :
 
 **Note** : En version digitale, les dés sont remplacés par de la génération aléatoire programmatique.
 
+### Résultats des tests
+
+**Date** : Novembre 2025
+**Testeur** : Bastien
+**Verdict** : ✅ **GO VALIDÉ** avec ajustements
+
+Voir le rapport complet : [`docs/PAPER_PROTOTYPE_TEST_RESULTS.md`](PAPER_PROTOTYPE_TEST_RESULTS.md)
+
+**Synthèse** :
+
+- ✅ Concept jouable de bout en bout avec ajustements
+- ✅ Règles claires et comprises immédiatement
+- ✅ Synergie résolution/navigation fonctionne bien
+- ⚠️ Durée trop courte (2 min au lieu de 5-15 min)
+- ⚠️ Difficulté insuffisante (sensation de tutoriel)
+- ⚠️ Rejouabilité mitigée
+
+**Règles validées et modifiées** :
+
+1. **Navigation sur case vide** : Pouvoir rester après placement sans clé
+2. **Démarrage avec 2 indices aléatoires** (contrainte 4 max)
+3. **Game Over si inventaire vide** (nouvelle condition de défaite)
+4. **Événements d'erreur** : Perte d'indice principale + Téléportation occasionnelle
+5. **Gain d'indice par placement correct** : +1 indice (nouveau mécanisme)
+
+**Solutions pour proto digital** :
+
+- Timer par série pour augmenter difficulté et durée
+- Grilles progressives (4x4 → 5x5 → 6x6)
+- Effets visuels et sonores pour renforcer événements
+
 ### Variantes à tester
 
 - **Variante A** : Moins d'indices au départ (1 au lieu de 3)
@@ -337,13 +473,15 @@ Voir le fichier `prototypes/paper/LABDOKU_PROTOTYPE_PAPIER.md` pour :
 
 ## Prochaines étapes
 
-### Phase 3 : Tests papier (en cours)
+### Phase 3 : Tests papier ✅ COMPLÉTÉ
 
-- [ ] Jouer au moins 3 parties complètes
-- [ ] Tester les 4 variantes
-- [ ] Noter les observations dans le journal
-- [ ] Identifier les problèmes majeurs de game design
-- [ ] Décision GO/NO-GO pour le proto digital
+- [x] Jouer au moins 3 parties complètes
+- [x] Tester les variantes
+- [x] Noter les observations dans le journal
+- [x] Identifier les problèmes majeurs de game design
+- [x] Décision GO/NO-GO pour le proto digital → **GO VALIDÉ**
+
+**Résultats** : Voir [`docs/PAPER_PROTOTYPE_TEST_RESULTS.md`](PAPER_PROTOTYPE_TEST_RESULTS.md)
 
 ### Phase 4 : Prototype digital (à venir)
 
@@ -399,6 +537,55 @@ Voir le fichier `prototypes/paper/LABDOKU_PROTOTYPE_PAPIER.md` pour :
 - Thème enquêteur-démineur
 
 **Prochaine session** : Tests papier avec impression et découpage
+
+### 2025-11-11 : Tests papier complétés ✅ GO VALIDÉ
+
+**Session de test (3h)**
+
+- Tests du prototype papier avec plusieurs parties
+- Identification de 2 blocages critiques (résolus)
+- Validation du concept core
+- Décision GO pour prototype digital
+
+**Problèmes critiques résolus** :
+
+1. **Blocage initial** : Impossible d'avancer sans indices
+   - Solution : Démarrage avec 2 indices aléatoires (contrainte 4 max)
+
+2. **Blocage par clés non-adjacentes** : Clés 1 et 3 ne se touchent jamais
+   - Solution : Pouvoir rester sur case vide après placement sans clé
+
+**Ajustements majeurs** :
+
+- **Game Over** : Inventaire vide = défaite (nouvelle règle)
+- **Gain d'indice** : +1 à chaque placement correct (nouveau mécanisme)
+- **Événements d'erreur** : Perte d'indice principale (60-100%) + Téléportation occasionnelle (10-30%)
+- **Modes difficulté** : 1, 2 ou 3 clés au départ (tous testés et validés)
+
+**Observations** :
+
+- Durée trop courte : 2 min max (cible 5-15 min)
+- Difficulté insuffisante : sensation de tutoriel
+- Synergie résolution/navigation excellente
+- Événements créent équilibre frustration/fun intéressant
+
+**Solutions pour proto digital** :
+
+1. **Timer par série** (priorité) : Compte à rebours → explosion
+2. **Grilles progressives** (priorité) : 4x4 → 5x5 → 6x6
+3. Effets visuels/sonores pour renforcer immersion
+
+**Décisions de design finales** :
+
+- Navigation sur case vide : règle formalisée ✅
+- État initial : 2 clés + 2 indices aléatoires ✅
+- Game Over : inventaire vide ✅
+- Événements : Perte principale + Téléportation secondaire ✅
+- Récompense : +1 indice par placement + bonus séries ✅
+
+**Rapport complet** : [`docs/PAPER_PROTOTYPE_TEST_RESULTS.md`](PAPER_PROTOTYPE_TEST_RESULTS.md)
+
+**Prochaine session** : Création des spécifications techniques Godot
 
 ---
 
@@ -464,14 +651,14 @@ Voir le fichier `prototypes/paper/LABDOKU_PROTOTYPE_PAPIER.md` pour :
 
 ## Critères de succès
 
-### Proto papier (Phase 3)
+### Proto papier (Phase 3) ✅ VALIDÉ
 
-- [ ] Le jeu est jouable du début à la fin sans bloquer
-- [ ] Durée moyenne : 5-15 minutes
-- [ ] Le testeur comprend les règles en < 3 minutes
-- [ ] Au moins 1 "moment magique" émerge naturellement
-- [ ] Le testeur veut rejouer après 1 partie
-- [ ] Fun rating > 6/10
+- [x] Le jeu est jouable du début à la fin sans bloquer (avec ajustements)
+- [⚠️] Durée moyenne : 2 minutes (trop court, cible 5-15 min)
+- [x] Le testeur comprend les règles en < 3 minutes
+- [x] Au moins 1 "moment magique" émerge naturellement
+- [⚠️] Le testeur veut rejouer après 1 partie (mitigé, nécessite plus de difficulté)
+- [x] Fun rating > 6/10 (concept validé)
 
 ### Proto digital (Phase 4)
 
@@ -486,4 +673,4 @@ Voir le fichier `prototypes/paper/LABDOKU_PROTOTYPE_PAPIER.md` pour :
 
 **Document vivant - Sera mis à jour au fur et à mesure du développement**
 
-*Dernière mise à jour : 2025-11-08*
+*Dernière mise à jour : 2025-11-11 (Tests papier complétés, règles validées)*

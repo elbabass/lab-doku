@@ -180,24 +180,80 @@ Utilise la **page 4 du PDF** (checklist de validation) pour noter :
 **Gameplay de base** :
 
 - [ ] Jouable du début à la fin ?
+
+   ```markdown
+  Réponse user:
+   - Première grille pré-remplie : il est impossible d'avancer sans nombre-indice à poser. J'ai ajouté 2 indices aléatoires en début de partie (avec la règle de 4 fois le même chiffre entre les indices possédés et la grille, sinon on défausse et repioche)
+   - 2e essai sur cette grille: bloqué car je n'ai que les clés 1 et 3, qui ne sont pas sur des cases adjascentes. Plusieurs options de résolution :
+      1. s'assurer d'un chemin toujours possible à l'initialisation
+      2. En cours de jeu, si aucun chemin n'est accessible: erreur --> événement
+      3. (solution la plus simple, et donc utilisée)Comme on peut temporairement naviguer sur une case vide, un fois le chiffre posé, on peut rester sur la case, même sans clé. Par contre, une fois sorti, on ne peut pas y revenir sans sa clé. Cette idée peut quand même mener à un blocage, mais peut aussi donner de nouvelles possibilités pour des énigmes à résoudre.
+   - Essai sur grille pré-remplie 2 : faisable jusqu'à la fin.
+   ````
+
 - [ ] Bloqué trop souvent ?
-- [ ] Règles claires ?
+
+   ```markdown
+  Réponse user: Cf réponse précédente
+  ````
+
+- [x] Règles claires ?
 
 **Tension et intérêt** :
 
 - [ ] Décisions intéressantes ?
-- [ ] Anticipation des coups ?
-- [ ] Événements fun ou frustrants ?
+
+   ```markdown
+  Réponse user: Je suis partagé sur ce point. Il faudra trouver une difficulté supplémentaire pour donner envie de recommancer. Mes idées pour cela (options cumulables pour certaines):
+  1. Ajouter un compte à rebours, par ligne/colonne/bloc qui force à aller dans une direction avant une autre et maintient la pression. A zéro, la série correspondante explose et tous les chiffres disparaissent.
+  2. Avoir la menace du poseur de bombe en face qui attaque le joueur
+  3. Au contraire, dès qu'un chemin permet d'attrapper le poseur de bombe qui se promène sur la grille, on accède à un bonus ou même la partie est gagnée (plusieurs victoires possibles)
+  4. Augmenter la taille de la grille
+  5. Jeu multi-joueur en coopératif ou compétitif, afin que les décisions d'un joueur influent sur les autres
+  ````
+
+- [x] Anticipation des coups ?
+
+   ```markdown
+  Réponse user: Ca reste assez faible à ce stade, mais ça donne un peu à réfléchir. J'ai eu la sensation d'être dans un tuto ou dans les premiers niveaux d'un nouveau jeu, en termes de difficulté.
+  ````
+
+- [x] Événements fun ou frustrants ?
+
+   ```markdown
+  Réponse user: Les blocages sont intéressants dans la boucle frustration / fun. Il sera intéressant de doser cela dans la mise en oeuvre.
+  ````
+
 
 **Rythme** :
 
 - [ ] Durée : court / bon / long ?
+
+   ```markdown
+  Réponse user: Très court. 2 minutes maxi par partie.
+  ````
+
 - [ ] Envie de rejouer ?
+
+   ```markdown
+  Réponse user: Je suis partagé. Je pense qu'un meilleurs compromi de difficulté pourra être trouvé dans les premiers proto réel. Si c'est le cas, alors ça peut être très amusant de recommencer.
+  ````
+
 
 **Prochaine étape** :
 
-- [ ] GO → coder
-- [ ] Ajuster → quoi ?
+- [x] GO → coder
+
+   ```markdown
+  Réponse user: Les prochaines adaptations sont à faire sur une version jeux vidéo pour être vraiment palpables.
+  ````
+
+- [x] Ajuster → quoi ?
+
+   ```markdown
+  Réponse user: Les règles pour éviter le blocage. L'option 3 ci-dessus "Comme on peut temporairement naviguer sur une case vide, un fois le chiffre posé, on peut rester sur la case, même sans clé. Par contre, une fois sorti, on ne peut pas y revenir sans sa clé. Cette idée peut quand même mener à un blocage, mais peut aussi donner de nouvelles possibilités pour des énigmes à résoudre."
+  ````
+
 - [ ] NO-GO → pivot ?
 
 **Notes libres** : Utilise l'espace en bas de la page 4 pour tes observations.
@@ -213,15 +269,31 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
 - Démarrer avec **1 clé** au lieu de 2
 - **But** : Tester si c'est trop tendu dès le début
 
+   ```markdown
+  Réponse user: Très difficile car quasi impossible de naviguer. En effet, le même chiffre ne se touche jamais lui même. Donc, avec une seule clé, le seul déplacement possible est sur une case vide pour poser un chiffre.
+  Cette option sera intéressante pour un niveau ou un modde puzzle challenge.
+  ````
+
+
 ### Variante B : Plus de clés au départ
 
 - Démarrer avec **3 clés** (1, 2, 3) au lieu de 2
 - **But** : Tester si plus de liberté réduit le blocage
 
+   ```markdown
+  Réponse user: Rend un peu plus facile, mais sans briser le jeu. Je pense que pour les premières parties d'un nouveau joueur, cela peut être bien.
+  ````
+
+
 ### Variante C : D4 biaisé
 
 - Autoriser le joueur à **relancer le D4 une fois** s'il n'aime pas le résultat
 - **But** : Tester si plus de contrôle améliore l'expérience
+
+   ```markdown
+  Réponse user: L'idée est bonne, mais pas utile pour l'instant. J'ai aussi remplacé le D4 par un tirage au sort des indices-chiffres avec la règle de 4 occurence max entre la grille et l'inventaire pour un même chiffre. Dans cette situation, avec une grille 4x4, il reste peu de blocage au joueur.
+  ````
+
 
 ### Variante D : Événements plus sévères
 
@@ -230,11 +302,23 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
 - Perte : *(à définir selon tests)*
 - **But** : Tester si les événements deviennent trop punitifs
 
+   ```markdown
+  Réponse user:
+  - Effacer 8 cases est énorme. Mais il est possible de s'en tirer
+  - Téléportation aléatoire: reste jouable. Peut même aider
+  - Le mécanisme de perte est lié au game over : si le joueur n'a plus aucun indice-chiffre, il perd. Ca semble la meilleure piste. Ceci associé à un gain d'indice à chaque bon chiffre posé.
+  ````
+
+
 ### Variante E : Pas d'événements aléatoires
 
 - Les erreurs ne causent rien de spécial
 - Juste un compteur d'erreurs
 - **But** : Vérifier si les événements apportent vraiment au gameplay
+
+   ```markdown
+  Réponse user: Il faut une punition. La perte d'indice-chiffre est pas mal.
+  ````
 
 ---
 
@@ -246,17 +330,33 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
    - Peux-tu terminer une partie sans être bloqué ?
    - Combien de temps ça prend ? (cible : 5-15 min)
 
+   ```markdown
+   Réponse user: Cf. réponses ci-dessus. 2 minutes maxi par partie.
+   ````
+
 2. **Les décisions sont-elles intéressantes ?**
    - Est-ce que tu anticipes et planifies ?
    - Ou tu places au hasard en espérant ?
+
+   ```markdown
+   Réponse user: Peu d'anticipation sur cette difficulté. Il est assez rapide d'emettre une hypothèse du chiffre à placer. En cas de compromis, l'erreur et l'événement associé rendent le jeu sympa.
+   ````
 
 3. **Les événements d'erreur sont-ils fun ?**
    - Créent-ils des moments magiques ?
    - Ou juste de la frustration ?
 
+   ```markdown
+   Réponse user: je pense qu'avec un peu d'adrénaline et d'effets visuels et sonores, il seront mémorables :-D
+   ````
+
 4. **Le système de clés/indices fonctionne-t-il ?**
    - Est-ce que résoudre et naviguer se nourrissent bien ?
    - Manques-tu souvent de ressources ?
+
+   ```markdown
+   Réponse user: étonnemment, résoudre/naviguer se combine bien et crée une certaines tension/résolution agréable. En tests réels, il faudra voir comment faire varier cette tension/résolution. Pas de manque de resource notable.
+   ````
 
 ### Critères de succès
 
@@ -278,6 +378,56 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
 - Pas fun du tout (< 4/10)
 - Décisions pas intéressantes (placement au hasard)
 - Le core mechanic ne fonctionne pas
+
+---
+
+## ✅ SYNTHÈSE DES TESTS (Novembre 2025)
+
+### Verdict Final
+
+**🟢 GO VALIDÉ** pour le prototype digital avec ajustements.
+
+Voir le rapport complet : [`../../docs/PAPER_PROTOTYPE_TEST_RESULTS.md`](../../docs/PAPER_PROTOTYPE_TEST_RESULTS.md)
+
+### Règles Validées et Modifiées
+
+1. **Navigation sur case vide** ✅
+   - Règle adoptée : Une fois un chiffre posé sur une case vide, le joueur peut rester sur cette case même sans la clé correspondante
+   - Une fois sorti, impossible de revenir sans la clé
+   - Résout le blocage critique des clés non-adjacentes
+
+2. **Démarrage avec 2 indices aléatoires** ✅
+   - Règle adoptée : Le joueur démarre avec 2 indices aléatoires dans son inventaire
+   - Contrainte respectée : ≤4 occurrences par chiffre (grille + inventaire)
+   - Résout le blocage initial (impossible d'avancer sans indices)
+
+3. **Game Over si inventaire vide** ✅
+   - Nouvelle condition de défaite
+   - Crée une vraie tension et risque d'échec
+   - Compensé par gain d'indice à chaque placement correct
+
+4. **Gain d'indice par placement correct** ✅
+   - +1 indice aléatoire à chaque chiffre correct posé
+   - Crée un cycle risque/récompense équilibré
+
+5. **Événements d'erreur révisés** ✅
+   - Perte d'indice devient l'événement PRINCIPAL (60-100%)
+   - Téléportation devient OCCASIONNELLE (10-30%)
+   - Explosion OPTIONNELLE (0-10% ou supprimée)
+
+### Problèmes Identifiés
+
+- ⚠️ **Durée trop courte** : 2 min max (cible 5-15 min)
+  - Solutions : Timer par série + grilles progressives (4x4→5x5→6x6)
+- ⚠️ **Difficulté insuffisante** : Sensation de tutoriel permanent
+  - Solutions : Timer + grilles plus grandes + mécaniques avancées
+
+### Prochaines Étapes
+
+1. Créer spécifications techniques Godot
+2. Implémenter proto digital MVP (core loop sans timer)
+3. Ajouter timer par série et grilles progressives
+4. Tests utilisateurs
 
 ---
 

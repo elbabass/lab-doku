@@ -35,13 +35,15 @@ lab-doku/
 
 ## 🎯 Statut du projet
 
-**Phase actuelle** : Conception & Prototype papier
+**Phase actuelle** : Préparation prototype digital ✅ Tests papier complétés
 
 - [x] Phase 1 : Définition de l'essence (pitch, core mechanic, player fantasy)
 - [x] Phase 2 : Exploration des mécaniques (clés, indices, événements)
-- [ ] Phase 3 : Prototype papier & tests
+- [x] Phase 3 : Prototype papier & tests ✅ **GO VALIDÉ**
 - [ ] Phase 4 : Prototype digital (Godot)
 - [ ] Phase 5 : Itérations & polish
+
+**Dernière mise à jour** : 2025-11-11 - Tests papier complétés, règles validées. Voir [résultats détaillés](docs/PAPER_PROTOTYPE_TEST_RESULTS.md).
 
 ---
 
@@ -70,26 +72,30 @@ lab-doku/
 
 ### Ressources
 - **🔑 Clés** : Obtenues en complétant des séries (ligne/colonne/bloc 2x2)
+  - Départ : 2 clés (standard), 1 (difficile), 3 (facile)
 - **🔍 Jetons indices numérotés** (1-4) :
-  - Posés sur certaines cases de la grille au départ
-  - Ramassés automatiquement en passant dessus
+  - **Départ : 2 indices aléatoires** dans l'inventaire (règle validée)
+  - Posés sur certaines cases de la grille (ramassage automatique)
   - Stockés dans l'inventaire (contrainte : max 4 par chiffre au total)
   - Utilisés pour placer des chiffres (consomme le jeton)
-  - Récompense par série : indices aléatoires supplémentaires
+  - **Récompense par placement correct** : +1 indice aléatoire (nouveau)
+  - Récompense par série complétée : indices aléatoires supplémentaires
 
-### Placement
+### Placement et Navigation
 - Sur case vide : **choisis** un jeton de ton inventaire ou **annule** (recule)
-- Si correct : le chiffre reste, le jeton est consommé
-- Si erreur : événement aléatoire se déclenche
+- Si correct : le chiffre reste, le jeton est consommé, **+1 indice gagné**
+- Si erreur : événement se déclenche (principalement perte d'indice)
+- **Règle spéciale** (validée) : Une fois un chiffre posé sur case vide, tu peux y rester sans clé, mais tu ne pourras plus y revenir sans la clé correspondante
 
-### Événements d'erreur
-Quand tu places un mauvais chiffre, un événement aléatoire se déclenche (probabilité équirépartie) :
-- **💥 Explosion** : Efface les 4 cases adjacentes en croix (cases pré-remplies protégées)
-- **🌀 Téléportation** : Te déplace sur une case pré-remplie accessible aléatoire
-- **📉 Perte** : Perds 1 indice de ton inventaire (au hasard)
+### Événements d'erreur (système révisé)
+Quand tu places un mauvais chiffre, un événement se déclenche :
+- **📉 Perte d'indice** (principal) : Perds 1 indice de ton inventaire (au hasard)
+- **🌀 Téléportation** (occasionnel) : Te déplace sur une case pré-remplie aléatoire
+- **💥 Explosion** (optionnel) : Efface les 4-8 cases adjacentes (cases pré-remplies protégées)
 
-### Victoire
-Remplis correctement les 16 cases du sudoku 4x4 !
+### Victoire et Défaite
+- **Victoire** : Remplis correctement les 16 cases du sudoku 4x4 !
+- **Défaite** (nouveau) : **Game Over si inventaire vide** - tu n'as plus d'indices pour continuer
 
 ---
 
@@ -114,15 +120,23 @@ Remplis correctement les 16 cases du sudoku 4x4 !
 
 ---
 
-## 📊 Métriques de test
+## 📊 Résultats des tests papier ✅
 
-Questions clés à valider pendant les tests :
-- [ ] Est-ce que le jeu est jouable du début à la fin ?
-- [ ] Est-ce que je me sens bloqué trop souvent ?
-- [ ] Est-ce que je prends des décisions intéressantes ?
-- [ ] Est-ce que les événements d'erreur ajoutent du fun ou de la frustration ?
-- [ ] Durée de jeu : trop court / bon / trop long ?
-- [ ] Est-ce que je veux rejouer après une partie ?
+Tests complétés en novembre 2025. Voir le [rapport détaillé](docs/PAPER_PROTOTYPE_TEST_RESULTS.md).
+
+**Synthèse** :
+- ✅ Jouable du début à la fin (avec ajustements)
+- ✅ Règles claires, comprises immédiatement
+- ✅ Synergie résolution/navigation excellente
+- ⚠️ Durée trop courte (2 min au lieu de 5-15 min) → Solutions identifiées
+- ⚠️ Rejouabilité mitigée → Plus de difficulté nécessaire
+
+**Ajustements validés** :
+- Navigation sur case vide : pouvoir rester sans clé après placement
+- Démarrage : 2 indices aléatoires + 2 clés
+- Game Over si inventaire vide
+- Gain d'indice à chaque placement correct
+- Événements : perte d'indice principale
 
 ---
 
@@ -153,4 +167,4 @@ Si tu testes le proto papier :
 
 **Créé avec ❤️ pendant une exploration de game design**
 
-*Dernière mise à jour : Novembre 2025*
+*Dernière mise à jour : 2025-11-11 (Tests papier complétés)*
