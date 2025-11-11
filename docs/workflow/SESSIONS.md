@@ -6,31 +6,36 @@ Ce document décrit le workflow de développement par sessions courtes inspiré 
 
 Le développement Lab-doku suit un cycle itératif **RED → GREEN → REFACTO → REFLECT** avec des sessions courtes (< 30 min idéalement) focalisées sur des objectifs précis et mesurables.
 
+**Principe clé** : **CHAQUE problème suit le cycle RED → GREEN → REFACTO → REFLECT**. Une session contient donc **plusieurs cycles** successifs, un par problème résolu.
+
 ### Objectifs
 
-1. **Progresser par petits pas** : Résoudre 1-3 problèmes par session
-2. **Maintenir la qualité** : Code propre et testé à chaque étape
-3. **Apprendre continuellement** : Réflexion systématique après chaque session
+1. **Progresser par petits pas** : Résoudre 1-3 problèmes par session, un cycle complet par problème
+2. **Maintenir la qualité** : Code propre et testé à chaque cycle
+3. **Apprendre continuellement** : Micro-réflexion après chaque problème + rétro de session
 4. **Éviter le burnout** : Sessions courtes, pauses régulières
+5. **No-estimate** : Pas d'estimation a priori, seulement mesure et calculs a posteriori
 
 ### Différences avec TDD classique
 
 - **Moins de rigueur formelle** : Tests fonctionnels acceptés (pas uniquement unitaires)
 - **Focus sur les objectifs** : Résoudre un problème visible/testable
 - **Flexibilité** : RED peut être "feature manquante" au lieu de "test qui échoue"
+- **Cycles multiples** : Plusieurs cycles RED→GREEN→REFACTO→REFLECT par session
 
-## Le cycle RED → GREEN → REFACTO → REFLECT
+## Le cycle RED → GREEN → REFACTO → REFLECT (par problème)
 
-### 1. RED (5-8 min) - Définir le problème
+> **Important** : Ce cycle s'applique à **CHAQUE problème résolu**. Si tu as 3 problèmes dans une session, tu passes par 3 cycles complets.
+
+### 1. RED - Définir UN problème
 
 **Objectif** : Identifier clairement ce qui doit fonctionner et comment le vérifier.
 
 **Actions** :
 
-1. **Lire/créer le fichier de tests** : `docs/workflow/tests/YYYYMMDD_session_N.md`
-2. **Choisir 1-3 problèmes** de la liste (max 3 pour sessions < 30 min)
-3. **Définir les critères de succès** : Comment savoir que c'est résolu ?
-4. **Écrire/exécuter un test** (si applicable) : Test unitaire OU test manuel
+1. **Choisir UN problème** de la liste de la session
+2. **Définir les critères de succès** : Comment savoir que c'est résolu ?
+3. **Écrire/exécuter un test** (si applicable) : Test unitaire OU test manuel
 
 **Exemple** :
 
@@ -57,9 +62,9 @@ Le développement Lab-doku suit un cycle itératif **RED → GREEN → REFACTO �
 
 **État à la fin de RED** : Les tests échouent OU la feature n'existe pas encore.
 
-### 2. GREEN (10-15 min) - Implémenter la solution minimale
+### 2. GREEN - Implémenter la solution minimale
 
-**Objectif** : Faire passer les tests / résoudre les problèmes le plus rapidement possible.
+**Objectif** : Faire passer les tests / résoudre le problème le plus rapidement possible.
 
 **Actions** :
 
@@ -95,16 +100,18 @@ func _unhandled_input(event: InputEvent):
 
 **État à la fin de GREEN** : Tous les tests passent / problèmes résolus.
 
-### 3. REFACTO (5-10 min) - Nettoyer le code
+### 3. REFACTO - Nettoyer le code et valider
 
-**Objectif** : Améliorer la qualité du code sans changer le comportement.
+**Objectif** : Améliorer la qualité du code sans changer le comportement + valider avec tests et linters.
 
 **Actions** :
 
 1. **Éliminer la duplication** : Extraire fonctions/constantes communes
 2. **Appliquer les conventions** : Voir `docs/godot/CONVENTIONS.md`
 3. **Simplifier** : Rendre le code plus lisible
-4. **Vérifier** : Re-tester après chaque refactoring pour éviter les régressions
+4. **Lancer les tests automatiques** : Tests unitaires + tests d'intégration
+5. **Lancer les linters** : Markdown (`npx markdownlint-cli2`), Godot (warnings)
+6. **Vérifier** : Re-tester après chaque refactoring pour éviter les régressions
 
 **Refactorings typiques** :
 
@@ -134,81 +141,90 @@ func _unhandled_input(event: InputEvent):
             break
 ```
 
-**État à la fin de REFACTO** : Code propre, tests toujours verts.
+**État à la fin de REFACTO** : Code propre, tests verts, linters passent.
 
-### 4. REFLECT (3-5 min) - Mini-rétrospective
+### 4. REFLECT - Micro-réflexion sur le problème résolu
 
-**Objectif** : Apprendre de la session et planifier la suite.
+**Objectif** : Apprendre du cycle qui vient de se terminer et réajuster la suite de la session.
+
+**Actions** (rapides, 1-2 min max) :
+
+1. **Noter un apprentissage** : Qu'ai-je appris en résolvant ce problème ?
+2. **Identifier des problèmes émergents** : Ce problème a-t-il révélé :
+   - Une faiblesse de conception ?
+   - Un manque de tests ?
+   - Un nouveau problème à résoudre ?
+3. **Décider de la suite** :
+   - Ajouter de nouveaux problèmes à la liste de session (si urgent)
+   - Ou les noter pour la prochaine session
+   - Passer au problème suivant de la session
+
+**Questions guides** :
+
+- Ce problème était-il plus complexe que prévu ? Pourquoi ?
+- Ai-je découvert une limitation de l'architecture actuelle ?
+- Y a-t-il un refactoring plus profond à planifier ?
+- Dois-je ajouter des tests supplémentaires ?
+
+**Exemple de REFLECT après résolution d'un problème** :
+
+```markdown
+## Problème 1 : Déplacement du joueur - REFLECT
+
+**Apprentissage** : L'utilisation d'un dictionnaire pour les directions simplifie grandement le code.
+
+**Problèmes émergents** :
+- La validation des clés est actuellement dans PlayerController, mais devrait peut-être être dans KeyManager (responsabilité unique)
+- Pas de tests unitaires pour la logique de déplacement
+
+**Décision** : Ajouter ces 2 problèmes à la liste de la session actuelle (ou prochaine si pas le temps).
+
+**Suite** : Passer au Problème 2 (Vérification des clés).
+```
+
+**État à la fin de REFLECT** : Apprentissage noté, problèmes émergents identifiés, décision prise sur la suite.
+
+> **Important** : Après ce REFLECT, tu retournes au RED pour le problème suivant. Le cycle continue jusqu'à la fin de la session.
+
+## Mini-rétro de session (fin de session)
+
+**Quand** : À la fin de la session, après avoir complété tous les cycles RED→GREEN→REFACTO→REFLECT.
+
+**Objectif** : Documenter la session, mesurer et préparer la suivante.
 
 **Actions** :
 
 1. **Remplir le template de rétro** : `docs/workflow/retros/YYYYMMDD_session_N.md`
-2. **Noter les apprentissages** : Qu'ai-je découvert ?
-3. **Identifier les blocages** : Qu'est-ce qui a pris plus de temps que prévu ?
-4. **Mettre à jour le backlog** : Ajouter nouveaux problèmes identifiés
-5. **Créer fichier de tests suivant** : Préparer la prochaine session
+2. **Mesurer** :
+   - Heure de début et de fin
+   - Nombre de problèmes résolus
+   - Nombre de commits effectués
+3. **Noter les apprentissages** : Qu'ai-je découvert pendant cette session ?
+4. **Identifier les blocages** : Qu'est-ce qui a pris plus de temps que prévu ?
+5. **Mettre à jour le backlog** : Ajouter tous les nouveaux problèmes identifiés
+6. **Créer fichier de tests suivant** : Préparer la prochaine session avec les problèmes prioritaires
 
-**Template de rétro** :
-
-```markdown
-# Rétro Session 2025-11-12_01
-
-## Objectifs
-
-- [x] Déplacement du joueur
-- [x] Vérification des clés
-- [x] Animation visuelle
-
-## Durée
-
-- Début : 14h30
-- Fin : 14h55
-- Durée réelle : 25 min ✅
-
-## Ce qui a bien fonctionné
-
-- Le système de signaux a facilité la communication entre PlayerController et KeyManager
-- Les tests manuels étaient rapides grâce au hotreload Godot
-
-## Difficultés rencontrées
-
-- Confusion sur l'ordre d'exécution des signaux (résolu en lisant la doc)
-- Animation tween plus complexe que prévu (5 min perdues)
-
-## Apprentissages
-
-- `Tween.tween_property()` nécessite `create_tween()` à chaque fois
-- Les signaux Godot sont synchrones (exécution immédiate)
-
-## Problèmes identifiés pour sessions suivantes
-
-- Gérer les collisions avec les bords de la grille
-- Ajouter feedback visuel quand mouvement refusé (particules ?)
-- Optimiser les vérifications de clés (actuellement O(n) sur petit array)
-
-## Commit effectué
-
-- `feat: add player movement with key validation`
-- SHA : abc123def
-```
-
-**État à la fin de REFLECT** : Session documentée, prochaine session préparée.
+**Résultat** : Fichier de rétro complété dans `docs/workflow/retros/` et fichier de tests pour session suivante dans `docs/workflow/tests/`.
 
 ## Gestion des sessions
 
 ### Durée cible
 
 - **Idéal** : 20-30 minutes
-- **Maximum** : 45 minutes (sinon, découper le problème)
-- **Minimum** : 15 minutes (sinon, regrouper avec session suivante)
+- **Maximum** : 45 minutes (si dépassé, découper mieux les problèmes la prochaine fois)
+- **Minimum** : 15 minutes (si trop court, regrouper avec problèmes plus complexes)
+
+**Note** : Pas d'estimation a priori ! Seulement mesure a posteriori pour améliorer le découpage.
 
 ### Nombre de problèmes par session
 
-| Durée session | Problèmes recommandés | Complexité |
-|---------------|-----------------------|------------|
-| 15-20 min     | 1 problème            | Moyen      |
-| 20-30 min     | 2-3 problèmes         | Simple     |
-| 30-45 min     | 3-5 problèmes         | Très simple |
+Dépend de leur complexité réelle (découverte pendant la session) :
+
+- **1 problème** : Complexe ou avec découvertes importantes
+- **2-3 problèmes** : Complexité moyenne ou simple
+- **3-5 problèmes** : Très simples et bien définis
+
+**Note** : No-estimate ! On ne peut pas prédire, on mesure et on ajuste.
 
 ### Fréquence
 
@@ -491,87 +507,90 @@ echo "✅ Markdown linting passed."
 
 ### Exemple 1 : Session simple (1 problème)
 
-**Durée** : 20 min
+**Cycle RED → GREEN → REFACTO → REFLECT** :
 
-**RED** (5 min) :
+**RED** :
 
 - Problème : "Le joueur peut se déplacer avec les flèches"
 - Critères : Appuyer sur flèche déplace le sprite
 - Test manuel : Lancer le jeu et appuyer sur flèches
 
-**GREEN** (10 min) :
+**GREEN** :
 
 - Créer `player_controller.gd`
 - Implémenter `_unhandled_input()` avec 4 conditions (up/down/left/right)
 - Tester → ça marche !
 
-**REFACTO** (3 min) :
+**REFACTO** :
 
 - Extraire directions dans constante `DIRECTIONS`
 - Remplacer 4 if par boucle sur dictionnaire
+- Lancer linters
 - Re-tester → toujours OK
 
-**REFLECT** (2 min) :
+**REFLECT** :
 
-- Rétro : "Facile, mais animation manquante (à ajouter prochaine session)"
+- Apprentissage : "Dictionnaire plus lisible que 4 if"
+- Problème émergent : "Animation manquante"
+- Décision : Ajouter à prochaine session
 - Commit : `feat: add basic player movement`
 
-### Exemple 2 : Session complexe (3 problèmes)
+**Mesure** : Session de 18 min (1 cycle, simple).
 
-**Durée** : 35 min
+### Exemple 2 : Session avec 3 cycles (3 problèmes)
 
-**RED** (8 min) :
+**Cycle 1 : Vérifier clés avant déplacement**
 
-- Problème 1 : Vérifier clés avant déplacement
-- Problème 2 : Bloquer déplacement hors grille
-- Problème 3 : Animer le déplacement avec tween
-- Tests manuels définis pour chaque
+- RED → GREEN → REFACTO → REFLECT
+- Ajout `KeyManager`, vérification dans `_can_move_to()`
+- Commit : `feat: add key validation for movement`
 
-**GREEN** (18 min) :
+**Cycle 2 : Bloquer déplacement hors grille**
 
-- Problème 1 : Ajout `KeyManager`, vérification dans `_can_move_to()`
-- Problème 2 : Ajout `_is_valid_position()`
-- Problème 3 : Ajout tween dans `_move_to()` (plus long que prévu)
+- RED → GREEN → REFACTO → REFLECT
+- Ajout `_is_valid_position()`
+- Commit : `feat: add grid boundary validation`
 
-**REFACTO** (6 min) :
+**Cycle 3 : Animer le déplacement avec tween**
 
-- Déplacer constantes dans `Constants.gd`
-- Documenter fonctions publiques
-- Simplifier logique tween
+- RED → GREEN (complexe, documentation Godot nécessaire) → REFACTO → REFLECT
+- Ajout tween dans `_move_to()`
+- Commit : `feat: add movement animation`
 
-**REFLECT** (3 min) :
+**Mini-rétro session** : 3 cycles complétés, animation plus complexe que prévu (a nécessité lecture doc). **Mesure** : 42 min (3 cycles, complexité variée).
 
-- Rétro : "Tween complexe, à creuser doc Godot"
-- Commit : `feat: add player movement with key validation and animation`
+### Exemple 3 : Session avec WIP
 
-### Exemple 3 : Session bloquée (WIP)
+**Cycle : Explosion efface 4 cellules adjacentes**
 
-**Durée** : 30 min
-
-**RED** (5 min) :
+**RED** :
 
 - Problème : Explosion efface 4 cellules adjacentes
 - Test : Placer erreur → vérifier que cellules disparaissent
 
-**GREEN** (20 min) :
+**GREEN** :
 
 - Implémentation `_handle_explosion_event()`
 - Bug : Les cellules pré-remplies sont aussi effacées (pas voulu)
 - Tentatives de fix → toujours cassé
-- Timer session expire
+- Session terminée sans résolution
 
-**REFACTO** : Skipped (pas terminé)
+**REFACTO** : Skipped (problème non résolu)
 
-**REFLECT** (5 min) :
+**REFLECT** :
 
-- Rétro : "Logique effacement complexe, besoin aide/doc"
+- Apprentissage : "Logique effacement plus complexe que prévu"
+- Problème émergent : "Besoin de mieux comprendre la protection des cellules"
+- Décision : Commit WIP, continuer session suivante
 - Commit WIP : `wip: implement explosion event (prefilled cells not protected)`
-- Note pour session suivante : "Débugger protection cellules pré-remplies"
+
+**Mini-rétro session** : 1 cycle incomplet (WIP). **Mesure** : 28 min (blocage technique).
 
 **Session suivante** :
 
-- Reprendre le WIP, fixer le bug
+- Cycle repris : Débugger protection cellules pré-remplies
 - Commit final : `fix: protect prefilled cells from explosion`
+- **Mesure** : 15 min (résolution rapide après pause)
 
 ## Checklist de session
 
