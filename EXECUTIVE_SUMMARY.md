@@ -125,6 +125,7 @@ Aucun jeu n'a fusionné sudoku et navigation spatiale de cette manière. Le terr
 - **Rapport complet** : [`docs/PAPER_PROTOTYPE_TEST_RESULTS.md`](docs/PAPER_PROTOTYPE_TEST_RESULTS.md)
 
 **Ajustements majeurs** :
+
 - Navigation sur case vide : pouvoir rester sans clé après placement
 - Démarrage : 2 indices aléatoires obligatoires
 - Game Over si inventaire vide (nouvelle condition de défaite)

@@ -224,7 +224,6 @@ Utilise la **page 4 du PDF** (checklist de validation) pour noter :
   Réponse user: Les blocages sont intéressants dans la boucle frustration / fun. Il sera intéressant de doser cela dans la mise en oeuvre.
   ````
 
-
 **Rythme** :
 
 - [ ] Durée : court / bon / long ?
@@ -238,7 +237,6 @@ Utilise la **page 4 du PDF** (checklist de validation) pour noter :
    ```markdown
   Réponse user: Je suis partagé. Je pense qu'un meilleurs compromi de difficulté pourra être trouvé dans les premiers proto réel. Si c'est le cas, alors ça peut être très amusant de recommencer.
   ````
-
 
 **Prochaine étape** :
 
@@ -274,7 +272,6 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
   Cette option sera intéressante pour un niveau ou un modde puzzle challenge.
   ````
 
-
 ### Variante B : Plus de clés au départ
 
 - Démarrer avec **3 clés** (1, 2, 3) au lieu de 2
@@ -284,7 +281,6 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
   Réponse user: Rend un peu plus facile, mais sans briser le jeu. Je pense que pour les premières parties d'un nouveau joueur, cela peut être bien.
   ````
 
-
 ### Variante C : D4 biaisé
 
 - Autoriser le joueur à **relancer le D4 une fois** s'il n'aime pas le résultat
@@ -293,7 +289,6 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
    ```markdown
   Réponse user: L'idée est bonne, mais pas utile pour l'instant. J'ai aussi remplacé le D4 par un tirage au sort des indices-chiffres avec la règle de 4 occurence max entre la grille et l'inventaire pour un même chiffre. Dans cette situation, avec une grille 4x4, il reste peu de blocage au joueur.
   ````
-
 
 ### Variante D : Événements plus sévères
 
@@ -308,7 +303,6 @@ Une fois le scénario de base joué, teste ces variations (utilise les grilles v
   - Téléportation aléatoire: reste jouable. Peut même aider
   - Le mécanisme de perte est lié au game over : si le joueur n'a plus aucun indice-chiffre, il perd. Ca semble la meilleure piste. Ceci associé à un gain d'indice à chaque bon chiffre posé.
   ````
-
 
 ### Variante E : Pas d'événements aléatoires
 

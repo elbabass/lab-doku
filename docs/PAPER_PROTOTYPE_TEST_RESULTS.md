@@ -31,6 +31,7 @@
 **Problème** : Impossible d'avancer sans indices numériques au départ. La grille pré-remplie seule ne permet aucun mouvement.
 
 **Solution adoptée** : Démarrer avec **2 indices aléatoires** dans l'inventaire
+
 - Contrainte respectée : Max 4 occurrences du même chiffre (grille + inventaire)
 - Procédure : Si tirage invalide (dépasse contrainte), défausser et repiocher
 - Impact : Résout complètement le problème de démarrage
@@ -44,11 +45,13 @@
 **Problème** : Avec seulement les clés 1 et 3, bloqué car ces chiffres ne sont jamais adjacents dans un sudoku. Aucun chemin possible.
 
 **Options envisagées** :
+
 1. S'assurer d'un chemin toujours possible à l'initialisation
 2. En cours de jeu, si aucun chemin accessible : erreur → événement
 3. **Pouvoir rester sur une case vide après y avoir posé un chiffre, même sans clé** ✅
 
 **Solution adoptée (Option 3)** :
+
 - Une fois un chiffre posé sur une case vide, le joueur peut **rester sur cette case même sans la clé correspondante**
 - Une fois sorti de la case, impossible d'y revenir sans posséder la clé
 - Permet de débloquer des situations tout en créant de nouvelles contraintes tactiques
@@ -63,6 +66,7 @@
 **Problème** : Durée de 2 minutes maximum par partie (cible : 5-15 min). Sensation de tutoriel permanent, peu d'anticipation stratégique.
 
 **Solutions prévues pour proto digital** :
+
 1. **Compte à rebours par série** (ligne/colonne/bloc) ⭐ PRIORITÉ
    - Force l'ordre de résolution
    - Maintient la pression temporelle
@@ -86,12 +90,14 @@
 **Problème** : Distribution équiprobable (33% chaque) ne reflète pas les besoins de tension du jeu.
 
 **Solution adoptée** :
+
 - **Perte d'indice** devient l'événement **principal**
 - **Téléportation** devient **occasionnelle** (reste intéressante)
 - **Explosion** : Testée en version sévère (8 cases) - énorme mais jouable
 - **Téléportation aléatoire** (pas forcément accessible) reste jouable et peut aider
 
 **Nouveau système proposé** :
+
 - Perte d'indice : événement de base (fréquence à définir)
 - Téléportation : événement secondaire (10-30% de chance)
 - Explosion : à décider (conserver/supprimer/rare)
@@ -107,6 +113,7 @@
 **Problème** : Le jeu n'a pas de tension finale, pas de risque de perdre réellement.
 
 **Solution adoptée** : **Game Over si inventaire vide**
+
 - Si le joueur n'a plus aucun indice chiffré dans son inventaire → **Game Over**
 - Combiné avec un **gain d'indice à chaque bon chiffre posé** (nouveau mécanisme)
 - Crée un cycle risque/récompense équilibré
@@ -126,6 +133,7 @@
 **OUI** (avec ajustements)
 
 Détails :
+
 - **Grille 1 (pré-remplie initiale)** : Impossible sans les 2 indices aléatoires au départ
 - **2e essai sur grille 1** : Bloqué par clés 1 et 3 non-adjacentes → solution adoptée (règle case vide)
 - **Grille 2 (pré-remplie avancée)** : ✅ Faisable jusqu'à la fin avec les ajustements
@@ -135,6 +143,7 @@ Détails :
 **Résolu par les ajustements**
 
 Les deux règles suivantes éliminent les blocages critiques :
+
 1. Démarrage avec 2 indices aléatoires
 2. Pouvoir rester sur case vide après placement
 
@@ -156,6 +165,7 @@ Observation :
 > "Je suis partagé sur ce point. Il faudra trouver une difficulté supplémentaire pour donner envie de recommencer."
 
 Les décisions existent mais manquent de profondeur à ce stade. Solutions envisagées :
+
 1. Timer par série (pression temporelle) ⭐
 2. Poseur de bombe adverse
 3. Capture du poseur = victoire
@@ -264,6 +274,7 @@ Observation :
 **Résultat** : ✅ Jouables mais intenses
 
 Observations :
+
 - **Explosion 8 cases** : "Énorme. Mais il est possible de s'en tirer"
 - **Téléportation aléatoire** : "Reste jouable. Peut même aider"
 - **Perte d'indice** : "Le mécanisme de perte est lié au game over : si le joueur n'a plus aucun indice-chiffre, il perd. Ça semble la meilleure piste. Ceci associé à un gain d'indice à chaque bon chiffre posé."
@@ -316,10 +327,12 @@ Observation :
 ### Nouveau Système Proposé
 
 **Par placement correct** :
+
 - +1 indice aléatoire (nouveau mécanisme)
 - Justification : Compense les pertes, encourage l'exploration
 
 **Par série complétée** :
+
 - +1 clé (choix)
 - +1-2 indices aléatoires supplémentaires (à ajuster selon tests)
 
@@ -355,18 +368,18 @@ Observation :
 
 ### Questions de Scope Proto Digital
 
-5. **Génération de grille** :
+1. **Génération de grille** :
    - Option A : Hardcoder 1 grille (plus rapide) ⭐
    - Option B : Créer 3-5 grilles manuellement
    - Option C : Génération procédurale dès v0.1
    - **Recommandation** : B (3-5 grilles hardcodées pour tester variété)
 
-6. **Feedback visuel/sonore** :
+2. **Feedback visuel/sonore** :
    - Option A : Placeholder minimaliste (carrés + texte)
    - Option B : Assets sympas (sprites, particules, SFX) ⭐
    - **Recommandation** : B (important pour ressentir les événements)
 
-7. **UI d'inventaire** :
+3. **UI d'inventaire** :
    - Option A : Compteur texte ("1:2, 2:1, 3:0, 4:3")
    - Option B : Grille visuelle avec icônes ⭐
    - **Recommandation** : B (plus lisible et intuitif)

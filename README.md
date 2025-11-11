@@ -67,10 +67,12 @@ lab-doku/
 ## 🎲 Mécaniques principales
 
 ### Déplacement
+
 - Tu peux te déplacer sur les cases adjacentes (haut/bas/gauche/droite)
 - Tu dois posséder la **clé de couleur** correspondant au chiffre de la case
 
 ### Ressources
+
 - **🔑 Clés** : Obtenues en complétant des séries (ligne/colonne/bloc 2x2)
   - Départ : 2 clés (standard), 1 (difficile), 3 (facile)
 - **🔍 Jetons indices numérotés** (1-4) :
@@ -82,18 +84,22 @@ lab-doku/
   - Récompense par série complétée : indices aléatoires supplémentaires
 
 ### Placement et Navigation
+
 - Sur case vide : **choisis** un jeton de ton inventaire ou **annule** (recule)
 - Si correct : le chiffre reste, le jeton est consommé, **+1 indice gagné**
 - Si erreur : événement se déclenche (principalement perte d'indice)
 - **Règle spéciale** (validée) : Une fois un chiffre posé sur case vide, tu peux y rester sans clé, mais tu ne pourras plus y revenir sans la clé correspondante
 
 ### Événements d'erreur (système révisé)
+
 Quand tu places un mauvais chiffre, un événement se déclenche :
+
 - **📉 Perte d'indice** (principal) : Perds 1 indice de ton inventaire (au hasard)
 - **🌀 Téléportation** (occasionnel) : Te déplace sur une case pré-remplie aléatoire
 - **💥 Explosion** (optionnel) : Efface les 4-8 cases adjacentes (cases pré-remplies protégées)
 
 ### Victoire et Défaite
+
 - **Victoire** : Remplis correctement les 16 cases du sudoku 4x4 !
 - **Défaite** (nouveau) : **Game Over si inventaire vide** - tu n'as plus d'indices pour continuer
 
@@ -109,11 +115,13 @@ Quand tu places un mauvais chiffre, un événement se déclenche :
 ## 🎨 Inspirations
 
 ### Jeux similaires
+
 - **Baba Is You** - Méta-puzzle où résoudre change les règles
 - **The Witness** - Puzzles débloquent l'exploration
 - **Puzzle Quest** - Mélange de genres (match-3 + RPG)
 
 ### Concepts uniques de lab-doku
+
 - Tu ES dans le puzzle (pas à côté)
 - Résoudre et naviguer sont la même action
 - Le sudoku n'est pas décoratif, c'est le terrain de jeu
@@ -125,6 +133,7 @@ Quand tu places un mauvais chiffre, un événement se déclenche :
 Tests complétés en novembre 2025. Voir le [rapport détaillé](docs/PAPER_PROTOTYPE_TEST_RESULTS.md).
 
 **Synthèse** :
+
 - ✅ Jouable du début à la fin (avec ajustements)
 - ✅ Règles claires, comprises immédiatement
 - ✅ Synergie résolution/navigation excellente
@@ -132,6 +141,7 @@ Tests complétés en novembre 2025. Voir le [rapport détaillé](docs/PAPER_PROT
 - ⚠️ Rejouabilité mitigée → Plus de difficulté nécessaire
 
 **Ajustements validés** :
+
 - Navigation sur case vide : pouvoir rester sans clé après placement
 - Démarrage : 2 indices aléatoires + 2 clés
 - Game Over si inventaire vide
@@ -145,6 +155,7 @@ Tests complétés en novembre 2025. Voir le [rapport détaillé](docs/PAPER_PROT
 Ce projet est actuellement en phase d'exploration personnelle. Les retours sur le prototype papier sont les bienvenus !
 
 Si tu testes le proto papier :
+
 1. Remplis le journal de test dans le document
 2. Ouvre une issue avec tes observations
 3. Ou contacte directement via [à définir]
