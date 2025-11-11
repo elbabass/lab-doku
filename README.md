@@ -70,13 +70,23 @@ lab-doku/
 
 ### Ressources
 - **🔑 Clés** : Obtenues en complétant des séries (ligne/colonne/bloc 2x2)
-- **🔍 Indices** : Nécessaires pour placer des chiffres (+2 par série complétée)
+- **🔍 Jetons indices numérotés** (1-4) :
+  - Posés sur certaines cases de la grille au départ
+  - Ramassés automatiquement en passant dessus
+  - Stockés dans l'inventaire (contrainte : max 4 par chiffre au total)
+  - Utilisés pour placer des chiffres (consomme le jeton)
+  - Récompense par série : indices aléatoires supplémentaires
+
+### Placement
+- Sur case vide : **choisis** un jeton de ton inventaire ou **annule** (recule)
+- Si correct : le chiffre reste, le jeton est consommé
+- Si erreur : événement aléatoire se déclenche
 
 ### Événements d'erreur
-Quand tu places un mauvais chiffre, un événement aléatoire se déclenche :
-- **💥 Explosion** (33%) : Efface les 4 cases adjacentes en croix
-- **🌀 Téléportation** (33%) : Te déplace aléatoirement sur une case accessible
-- **📉 Perte** (33%) : Perds 1 indice
+Quand tu places un mauvais chiffre, un événement aléatoire se déclenche (probabilité équirépartie) :
+- **💥 Explosion** : Efface les 4 cases adjacentes en croix (cases pré-remplies protégées)
+- **🌀 Téléportation** : Te déplace sur une case pré-remplie accessible aléatoire
+- **📉 Perte** : Perds 1 indice de ton inventaire (au hasard)
 
 ### Victoire
 Remplis correctement les 16 cases du sudoku 4x4 !

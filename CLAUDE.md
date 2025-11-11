@@ -35,22 +35,24 @@ Lab-doku is a puzzle game that fuses sudoku with spatial navigation. Players exp
 
 ### Resources & Placement
 
-- **Indices (numbered tokens)**: Physical tokens placed on grid cells, each showing a number (1-4)
+- **Indices (numbered tokens)**: Numbered tokens (1-4) are **initially placed on certain grid cells**
 - Player **collects indices** by moving onto cells containing them (automatic pickup)
 - Collected indices go into player's **inventory** (unlimited capacity)
 - **Constraint**: Total (grid + inventory) ≤ 4 for each number
   - Example: If 3×"2" are on grid, player can have max 1×"2" in inventory
 - On **empty cell**, player chooses which number from inventory to place (or cancel & retreat)
-- Starting resources: 1-2 keys, 2-3 numbered indices
-- Rewards per completed series: +1 key (choice) + 2 random indices (2× D4 rolls)
+- Starting resources: 1-2 keys, 2-3 numbered indices in inventory
+- Rewards per completed series: +1 key (choice) + random indices (variants: 1 vs 2, determined by RNG in digital or D4 in paper)
 
-### Error Events (D6 roll when placing incorrect number)
+### Error Events (when placing incorrect number)
 
-When placing an incorrect number, roll 1D6:
+When placing an incorrect number, trigger a random event (equiprobable distribution):
 
-- **1-2: Explosion**: Clears 4 adjacent cells (cross pattern), pre-filled cells protected
-- **3-4: Teleportation**: Moves player to random pre-filled accessible cell
-- **5-6: Resource Loss**: Lose 1 random index from inventory
+- **Explosion** (1/3 probability, 1-2 on D6 in paper): Clears 4 adjacent cells (cross pattern), pre-filled cells protected
+- **Teleportation** (1/3 probability, 3-4 on D6 in paper): Moves player to random **pre-filled** accessible cell
+- **Resource Loss** (1/3 probability, 5-6 on D6 in paper): Lose 1 random index from inventory
+
+**Note**: In digital version, use RNG instead of D6. In paper prototype, use physical D6 die.
 
 Philosophy: Events are mostly punitive but can accidentally help (emergent gameplay moments).
 
@@ -89,11 +91,12 @@ Inspirations: Baba Is You (meta-puzzles), The Witness (solving unlocks explorati
 Values to adjust based on playtesting:
 
 - Starting keys (currently 1-2)
-- Starting indices (currently 2-3 numbered tokens)
-- Indices per completed series (currently 2 random via D4)
+- Starting indices in inventory (currently 2-3 numbered tokens)
+- Number of index tokens placed on grid initially (how many? where? which values?)
+- Indices per completed series (variants: 1 vs 2 random)
 - Keys per completed series (currently 1)
-- Index placement on grid (how many? where?)
-- Error event probabilities on D6 (currently 2/6 each)
+- Inventory constraint (currently ≤4 per number, could test ≤3 or unlimited)
+- Error event probabilities (currently equiprobable 1/3 each)
 - Explosion radius (currently 4 cells in cross pattern)
 - Number of pre-filled cells (currently 5-6)
 

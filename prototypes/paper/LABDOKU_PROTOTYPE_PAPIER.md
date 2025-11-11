@@ -124,7 +124,7 @@ Exemple ASCII :
 
 - Position : Case (0,0) - le "1" en haut à gauche
 - Clés : 🔑1 (rouge), 🔑3 (bleu) - coche-les sur le tracker
-- Indices : 3 jetons chiffrés (🔍1, 🔍3, 🔍3 par exemple - à définir selon scénario)
+- Indices : 3 jetons chiffrés (🔍2, 🔍4, 🔍4 par exemple - à définir selon scénario)
 - Matériel : D4 et D6 à portée de main
 
 **Objectif** : Tester le jeu du début à la fin

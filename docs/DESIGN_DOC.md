@@ -99,34 +99,40 @@ Compléter une **série** donne 1 clé au choix du joueur :
 
 ### 2. Système de placement de chiffres
 
-#### Ressource : Indices 🔍
+#### Ressource : Jetons indices numérotés 🔍
 
-Le joueur collecte des **indices** qui lui permettent de poser des chiffres.
+Le joueur collecte des **jetons indices numérotés** (1, 2, 3, 4) qui lui permettent de poser des chiffres.
 
 **Mécanique** :
 
-- 1 indice = placer 1 chiffre (n'importe lequel de 1 à 4)
-- Les indices ne sont pas liés à un chiffre spécifique
-- Le joueur démarre avec 2-3 indices
+- Chaque jeton indice porte un chiffre spécifique (1, 2, 3 ou 4)
+- Des jetons indices sont posés initialement sur certaines cases de la grille
+- Quand le joueur passe sur une case avec un jeton, il le **ramasse automatiquement**
+- Les jetons ramassés vont dans l'**inventaire** (capacité illimitée)
+- **Contrainte** : Total (grille + inventaire) ≤ 4 pour chaque chiffre
+  - Exemple : Si 3×"2" sont déjà sur la grille, le joueur ne peut avoir que 1×"2" max dans son inventaire
+- Le joueur démarre avec 2-3 jetons indices numérotés
 
 #### Obtention d'indices
 
-+2 indices pour chaque **série complétée** :
+**Variantes à tester** pour chaque **série complétée** :
 
-- Ligne complète → +2 indices
-- Colonne complète → +2 indices
-- Bloc 2x2 complet → +2 indices
+- **Variante A** : +1 indice aléatoire
+- **Variante B** : +2 indices aléatoires (version proto papier actuelle)
+- **Variante C** : +X indices (à déterminer selon tests)
 
-**Question en suspend** : Est-ce que poser un bon chiffre (même sans compléter de série) donne aussi des indices ? À tester.
+Les indices sont générés aléatoirement (simulation d'un dé à 4 faces en version digitale).
 
 #### Action de placement
 
-1. Le joueur se trouve sur une case vide
-2. Il dépense 1 indice
-3. Il choisit un chiffre (1, 2, 3 ou 4)
-4. Il le place sur la case
-5. Si c'est correct → rien de spécial, le jeu continue
-6. Si c'est une erreur → événement aléatoire se déclenche
+1. Le joueur se trouve sur une **case vide**
+2. **Options** :
+   - **Placer un chiffre** de son inventaire :
+     - Choisit un jeton parmi ses indices disponibles
+     - Place le chiffre sur la case
+     - **Si correct** → le chiffre reste, le jeton est consommé
+     - **Si erreur** → événement aléatoire se déclenche
+   - **Annuler** : Recule sur la case précédente (pas de placement)
 
 ---
 
@@ -140,7 +146,7 @@ Le joueur collecte des **indices** qui lui permettent de poser des chiffres.
 
 #### Événements d'erreur (aléatoires)
 
-Quand le joueur place un mauvais chiffre, **1 événement parmi 3** se déclenche (33% chacun) :
+Quand le joueur place un mauvais chiffre, **1 événement parmi 3** se déclenche. La probabilité est équirépartie (simulation d'un dé à 6 faces en version digitale : 1-2 = Explosion, 3-4 = Téléportation, 5-6 = Perte) :
 
 **💥 Explosion locale**
 
@@ -153,14 +159,14 @@ Quand le joueur place un mauvais chiffre, **1 événement parmi 3** se déclench
 
 **🌀 Téléportation aléatoire**
 
-- Déplace le joueur sur une case aléatoire **accessible** (où il possède la clé)
-- Si aucune case accessible : le joueur **reste sur place** (téléportation échoue)
+- Déplace le joueur sur une case **pré-remplie** aléatoire accessible (où il possède la clé)
+- Si aucune case pré-remplie accessible : le joueur **reste sur place** (téléportation échoue)
 - **Feedback visuel** : Fade out → fade in à la nouvelle position
 - **Son** : "Whoosh" ou effet de distorsion
 
 **📉 Perte d'indices**
 
-- Le joueur perd **1 indice**
+- Le joueur perd **1 indice de son inventaire** (au hasard)
 - Si le joueur a 0 indices : rien ne se passe
 - **Feedback visuel** : Compteur d'indices clignote en rouge + gros "-1" rouge qui descend en fade out
 - **Son** : Effet négatif (cloche, buzzer)
@@ -235,18 +241,22 @@ Les événements sont **majoritairement punitifs** mais peuvent **accidentelleme
 - Facile : 2 clés (ex : 🔴1 et 🔵3)
 - Normal : 1 clé (ex : 🔴1)
 
-**Indices** : 2-3 indices au départ
+**Indices** : 2-3 jetons indices numérotés au départ
 
-- À ajuster selon les tests
+- Les jetons peuvent être des doublons (ex : 🔍1, 🔍3, 🔍3)
+- À ajuster selon les tests (nombre et composition)
 
 ### Paramètres à tuner (après tests)
 
-- Nombre d'indices au départ
-- Nombre de clés au départ
-- Nombre d'indices gagnés par série (actuellement 2)
-- Probabilités des événements d'erreur (actuellement 33/33/33)
+- Nombre de jetons indices au départ (actuellement 2-3)
+- Composition des jetons de départ (quels chiffres ?)
+- Nombre de clés au départ (actuellement 1-2)
+- Nombre de jetons indices posés sur la grille (position et valeurs)
+- Nombre d'indices gagnés par série (variantes : 1 vs 2 vs X)
+- Probabilités des événements d'erreur (actuellement équirépartie 33/33/33)
 - Intensité des événements (ex : explosion 4 ou 8 cases ?)
-- Nombre de cases pré-remplies
+- Contrainte inventaire (≤4 vs ≤3 vs illimité)
+- Nombre de cases pré-remplies (actuellement 5-6)
 
 ---
 
@@ -304,15 +314,17 @@ Valider les mécaniques core **avant de coder** :
 - Est-ce que je prends des décisions intéressantes ?
 - Est-ce que les événements d'erreur ajoutent du fun ou de la frustration ?
 
-### Matériel
+### Matériel (spécifique au proto papier)
 
 Voir le fichier `prototypes/paper/LABDOKU_PROTOTYPE_PAPIER.md` pour :
 
-- 2 scénarios prêts à jouer
-- 3 grilles vierges
-- Jetons à découper (joueur, clés, indices, marqueurs)
-- Journal de test
+- 2 scénarios prêts à jouer avec solutions
+- Grilles vierges réutilisables
+- Jetons à découper (pion joueur, jetons indices numérotés 1-4, tracker de clés, marqueurs d'événements)
+- Dés physiques : D4 (génération aléatoire d'indices) et D6 (événements d'erreur)
 - Checklist de validation
+
+**Note** : En version digitale, les dés sont remplacés par de la génération aléatoire programmatique.
 
 ### Variantes à tester
 

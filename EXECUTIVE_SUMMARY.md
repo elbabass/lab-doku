@@ -27,13 +27,14 @@ Tu navigues sur une grille de sudoku, mais tu peux seulement marcher sur les chi
 ## 🎲 Boucle de gameplay
 
 1. **Explorer** → Te déplacer sur les chiffres dont tu as les clés
-2. **Déduire** → Identifier où placer les bons chiffres
-3. **Placer** → Dépenser un indice pour poser un chiffre
-4. **Conséquence** →
+2. **Collecter** → Ramasser les jetons indices numérotés sur la grille
+3. **Déduire** → Identifier où placer les bons chiffres
+4. **Placer** → Choisir un jeton de ton inventaire pour poser un chiffre (ou annuler)
+5. **Conséquence** →
    - Correct ? De nouveaux chemins s'ouvrent
    - Erreur ? Événement chaotique (explosion, téléportation, perte)
-5. **Progresser** → Compléter des séries donne clés + indices
-6. Retour à 1
+6. **Progresser** → Compléter des séries donne clés + indices aléatoires
+7. Retour à 1
 
 ---
 
@@ -47,17 +48,19 @@ Tu navigues sur une grille de sudoku, mais tu peux seulement marcher sur les chi
 
 ### Indices & Placement
 
-- Ressource nécessaire pour placer des chiffres
-- +2 indices par série complétée
-- Gestion tactique des ressources
+- **Jetons indices numérotés** (1-4) posés sur certaines cases de la grille
+- Ramassage automatique en passant dessus → stockage dans l'inventaire
+- Contrainte : Total (grille + inventaire) ≤ 4 par chiffre
+- Sur case vide : choisir un jeton de l'inventaire à placer (ou annuler/reculer)
+- Récompense par série : indices aléatoires supplémentaires (variantes à tester : 1 ou 2)
 
 ### Événements d'erreur
 
-Quand tu te trompes (33% chacun) :
+Quand tu te trompes (probabilité équirépartie) :
 
-- **💥 Explosion** : Efface les 4 cases adjacentes
-- **🌀 Téléportation** : Te déplace aléatoirement
-- **📉 Perte** : Perds 1 indice
+- **💥 Explosion** : Efface les 4 cases adjacentes (cases pré-remplies protégées)
+- **🌀 Téléportation** : Te déplace sur une case pré-remplie accessible aléatoire
+- **📉 Perte** : Perds 1 indice de ton inventaire (au hasard)
 
 ---
 
